@@ -1,17 +1,63 @@
 
  chrome.browserAction.onClicked.addListener(function(tab) {
   //On Firefox document.body.textContent is probably more appropriate
+   chrome.tabs.executeScript(null, { file: "jquery-3.2.1.min.js" }, function() {
     chrome.tabs.executeScript(tab.id,{
-        code: 'document.getElementsByClassName("table")[0].innerHTML;'
+        // code: 'document.getElementsByClassName("rowHovr ng-scope")[0].innerHTML;'
+        code: `$(".table-responsive.clear_lr:not('.ng-hide') .table .rowHovr")`
         //If you had something somewhat more complex you can use an IIFE:
         //code: '(function (){return document.body.innerText})();'
         //If your code was complex, you should store it in a
         // separate .js file, which you inject with the file: property.
     },receiveText);
+  });
+    
 });
 
 function receiveText(resultsArray){
+    var stockList = [];
+    var stockDetail = {
+        company:'',
+        ltp: 0,
+        quantity: 0,
+        avgCost: 0,
+        amountInvested: 0,
+        daysChangeRs: 0,
+        daysChangePerc: 0,
+        currentNetWorth: 0,
+        todaysGainLossRs: 0,
+        notionalGainLossRs: 0,
+        notionalGainLossPerc: 0
+    }
+
     alert(resultsArray[0]);
+
+    // resultsArray.forEach(function(element, index) {
+    //     var column = $(element).find('td');
+    //     // stockList.push(column[0].innerText);
+    //     stockList.push(column[0]);
+    // });
+    alert('hiiiii');
+    
+    for (var row = 0; row < resultsArray.length; row++) {        
+        var column = $(resultsArray[row]).find('td');
+        // alert(Object.keys(column));
+        alert(column[0].innerText);
+        alert('hi');        
+        //stockDetail.company = column[0].innerText;
+        // stockDetail.ltp =parseFloat( column[1].innerText);
+        // stockDetail.quantity =parseFloat( column[2].innerText);
+        // stockDetail.avgCost =parseFloat( column[3].innerText);
+        // stockDetail.amountInvested =parseFloat( column[4].innerText);
+        // stockDetail.daysChangeRs =parseFloat( column[5].innerText);
+        // stockDetail.daysChangePerc =parseFloat( column[6].innerText);
+        // stockDetail.currentNetWorth =parseFloat( column[7].innerText);
+        // stockDetail.todaysGainLossRs =parseFloat( column[8].innerText);
+        // stockDetail.notionalGainLossRs =parseFloat( column[9].innerText);
+        // stockDetail.notionalGainLossPerc =parseFloat( column[10].innerText);
+        stockList.push(column[0].innerText);
+    }
+    alert(stockList[0]);
 }
 // function getCurrentTabUrl(callback) { 
 //   var queryInfo = {

@@ -12,8 +12,14 @@
   "permissions": [
     "activeTab"
   ],
+  "content_scripts":[
+    {
+      "matches": ["http://jquery.com/*"],
+      "js":["jquery-3.2.1.min.js"]
+    }
+  ],
   "background": {
     "persistent": false,
-    "scripts": ["stock.js"]
+    "scripts": ["jquery-3.2.1.min.js","stock.js"]
 }
 }
