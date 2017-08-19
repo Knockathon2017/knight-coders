@@ -14,6 +14,8 @@ const app = express();
 mongoose.connect('mongodb://localhost:27017/stockdb', (err) => {
     if (err) {
         console.log('error in connecting mongodb');
+    } else {
+
     }
 });
 mongoose.connection.collections['economictimes'].drop(function (err) {

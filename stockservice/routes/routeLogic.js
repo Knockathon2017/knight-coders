@@ -131,6 +131,7 @@ function createDocRecurse(lineList, schemaName) {
 
 function getDataEc() {
   return EconomicTimesDoc.find({}, (err, doc) => {
+    dataList = {};
     dataList.ec = doc;
   });
 }
@@ -279,6 +280,14 @@ function getDataYc(res) {
     res.send(dataList);
   });
 }
+
+
+function getStockCount(res) {
+  return stockCountDoc.find({}, (err, doc) => {
+    console.log(doc)
+    res.send(doc);
+  });
+}
 module.exports.stock = (req, res) => {
   createDocRecurse(economicTimesList, 'EconomicTimes').then(() => {
     getDataEc().then(() => {
@@ -286,13 +295,26 @@ module.exports.stock = (req, res) => {
         getDataMc().then(() => {
           createDocRecurse(yahooFinanceList, 'YahooFinance').then(() => {
             getDataYc(res);
+          }).catch((err) => {
+            console.log(err)
           });
+        }).catch((err) => {
+          console.log(err)
         });
+      }).catch((err) => {
+        console.log(err)
       });
+    }).catch((err) => {
+      console.log(err)
     });
+  }).catch((err) => {
+    console.log(err)
   });
 
 
 
 
 };
+module.exports.stockCount = (req, res) => {
+  getStockCount(res);
+}
