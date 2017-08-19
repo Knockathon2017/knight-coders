@@ -5,4 +5,5 @@ const router = new express.Router();
 
 router.get('/stocks', routeLogic.stock);
 
+
 module.exports = router;
