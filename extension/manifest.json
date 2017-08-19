@@ -10,7 +10,7 @@
 	  "default_title": "Click here!"
   },
   "permissions": [
-    "activeTab"
+    "activeTab", "http://localhost:8787/stockCount"
   ],
   "content_scripts":[
     {
