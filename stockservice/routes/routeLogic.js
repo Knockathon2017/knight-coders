@@ -108,7 +108,7 @@ var stockCountDoc = mongoose.model('stockCount', stockCount);
 // "async" module to avoid such situations.)
 function createDocRecurse(lineList, schemaName) {
   return new Promise((resolve, reject) => {
-    if (lineList.length) {
+    if (lineList && lineList.length && lineList[lineList.length] !== "") {
       var line = lineList.shift();
       var doc;
       if (schemaName === 'EconomicTimes') {
@@ -123,7 +123,7 @@ function createDocRecurse(lineList, schemaName) {
       });
       return resolve(doc.save(createDocRecurse(lineList, schemaName)));
     } else {
-      return reject('error');
+      return resolve(true);
     }
   })
 
@@ -131,7 +131,6 @@ function createDocRecurse(lineList, schemaName) {
 
 function getDataEc() {
   return EconomicTimesDoc.find({}, (err, doc) => {
-    dataList = {};
     dataList.ec = doc;
   });
 }
