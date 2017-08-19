@@ -150,6 +150,9 @@ function getDataYc(res) {
       if (record.Stock) {
         var meanValue = 3;
         var count = 1;
+        var buyPrice = record.BuyPrice * 3;
+        var expectedReturns = record.ExpectedReturns * 3;
+        var sellPrice = record.SellPrice * 3;
         var mcRecord = _.find(dataList.mc, {
           Stock: record.Stock
         });
@@ -162,6 +165,9 @@ function getDataYc(res) {
           });
           meanValue = meanValue + 2;
           count++;
+          buyPrice = buyPrice + mcRecord.BuyPrice * 2;
+          expectedReturns = expectedReturns + mcRecord.ExpectedReturns * 2;
+          sellPrice = sellPrice + mcRecord.SellPrice * 2;
         }
 
         var ycRecord = _.find(dataList.yc, {
@@ -174,6 +180,9 @@ function getDataYc(res) {
               return ob;
             }
           });
+          buyPrice = buyPrice + ycRecord.BuyPrice;
+          expectedReturns = expectedReturns + ycRecord.ExpectedReturns;
+          sellPrice = sellPrice + ycRecord.SellPrice;
           meanValue = meanValue + 1;
           count++;
         }
@@ -182,13 +191,12 @@ function getDataYc(res) {
         newRecord.Stock = record.Stock,
           newRecord.Sector = record.Sector,
           newRecord.Cap = record.Cap,
-          newRecord.BuyPrice = record.BuyPrice,
-          newRecord.ExpectedReturns = record.ExpectedReturns,
+          newRecord.BuyPrice = buyPrice/meanValue,
+          newRecord.ExpectedReturns = expectedReturns/meanValue,
           newRecord.BuySell = record.BuySell,
-          newRecord.SellPrice = record.SellPrice,
+          newRecord.SellPrice = sellPrice/meanValue,
           newRecord.TimeFrame = record.TimeFrame,
           newRecord.Company = record.Company,
-          newRecord.ExpectedReturns = record.ExpectedReturns,
           newRecord.count = count;
         newRecord.weightedAvg = meanValue;
         var stockc = new stockCountDoc(newRecord);
@@ -205,6 +213,9 @@ function getDataYc(res) {
     for (var record of dataList.mc) {
 
       if (record.Stock) {
+        var buyPrice = record.BuyPrice * 2;
+        var expectedReturns = record.ExpectedReturns * 2;
+        var sellPrice = record.SellPrice * 2;
         var meanValue = 2;
         var count = 1;
 
@@ -218,6 +229,9 @@ function getDataYc(res) {
               return ob;
             }
           });
+          buyPrice = buyPrice + ycRecord.BuyPrice;
+          expectedReturns = expectedReturns + ycRecord.ExpectedReturns;
+          sellPrice = sellPrice + ycRecord.SellPrice;
           meanValue = meanValue + 1;
           count++;
         }
@@ -226,13 +240,12 @@ function getDataYc(res) {
         newRecord.Stock = record.Stock,
           newRecord.Sector = record.Sector,
           newRecord.Cap = record.Cap,
-          newRecord.BuyPrice = record.BuyPrice,
-          newRecord.ExpectedReturns = record.ExpectedReturns,
+          newRecord.BuyPrice = buyPrice/meanValue,
+          newRecord.ExpectedReturns = expectedReturns/meanValue,
           newRecord.BuySell = record.BuySell,
-          newRecord.SellPrice = record.SellPrice,
+          newRecord.SellPrice = sellPrice/meanValue,
           newRecord.TimeFrame = record.TimeFrame,
           newRecord.Company = record.Company,
-          newRecord.ExpectedReturns = record.ExpectedReturns,
           newRecord.count = count;
         newRecord.weightedAvg = meanValue;
         var stockc = new stockCountDoc(newRecord);
@@ -262,7 +275,6 @@ function getDataYc(res) {
           newRecord.SellPrice = record.SellPrice,
           newRecord.TimeFrame = record.TimeFrame,
           newRecord.Company = record.Company,
-          newRecord.ExpectedReturns = record.ExpectedReturns,
           newRecord.count = count;
         newRecord.weightedAvg = meanValue;
         var stockc = new stockCountDoc(newRecord);
@@ -283,7 +295,7 @@ function getDataYc(res) {
 
 function getStockCount(res) {
   return stockCountDoc.find({}, (err, doc) => {
-    console.log(doc)
+    //console.log(doc)
     res.send(doc);
   });
 }
@@ -309,9 +321,6 @@ module.exports.stock = (req, res) => {
   }).catch((err) => {
     console.log(err)
   });
-
-
-
 
 };
 module.exports.stockCount = (req, res) => {

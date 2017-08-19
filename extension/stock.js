@@ -5,10 +5,6 @@
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
   if(message.stockList) {
-
-      //alert(message.stockList[0].company);
-      //alert(message.stockList[1].company);
-
       $.ajax({
         url: "http://localhost:8787/stockCount",
         method: "GET",
@@ -31,14 +27,21 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
                     }
                 }
             });
+        
+            var sortedStocks = _.orderBy(data, ['weightedAvg'], ['desc']);            
+            var genericTopFiveStocks = sortedStocks.slice(0, 5);
 
-            var output = '';
+            var outputUserPreference = 'User portfolio basis: \n';
             $.each(stocksToBuy, function(i, da) {
-                output = output + 'Company: ' + da.Company + ' | Buy Price: ' + da.BuyPrice + ' | Target Price: ' + da.SellPrice + ' | Expected Returns: ' + da.ExpectedReturns + '\n';
+                outputUserPreference = outputUserPreference + (i+1) + '. Company: ' + da.Company + ' | Buy Price: ' + da.BuyPrice + ' | Target Price: ' + da.SellPrice + ' | Expected Returns: ' + da.ExpectedReturns + '\n';
             });
 
-            alert(output);
-            //alert('Hello');
+            var outputgenericPreference = 'General prediction: \n';
+            $.each(genericTopFiveStocks, function(i, da) {
+                outputgenericPreference = outputgenericPreference + (i+1) + '. Company: ' + da.Company + ' | Buy Price: ' + da.BuyPrice + ' | Target Price: ' + da.SellPrice + ' | Expected Returns: ' + da.ExpectedReturns + '\n';
+            });
+            var finalOutput = outputUserPreference + '\n\n' + outputgenericPreference;
+            alert(finalOutput);
         }
     });
   }
