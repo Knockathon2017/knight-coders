@@ -15,11 +15,11 @@
   "content_scripts":[
     {
       "matches": ["<all_urls>"],
-      "js":["jquery-3.2.1.min.js"]
+      "js":["jquery-3.2.1.min.js", "lodash.js"]
     }
   ],
   "background": {
     "persistent": false,
-    "scripts": ["jquery-3.2.1.min.js","stock.js"]
+    "scripts": ["jquery-3.2.1.min.js","stock.js", "lodash.js"]
   }
 }
