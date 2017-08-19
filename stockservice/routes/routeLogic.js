@@ -150,7 +150,8 @@ function getDataYc(res) {
       if (record.Stock) {
         var meanValue = 3;
         var count = 1;
-        var buyPrice = record.BuyPrice * 3;
+        var buyPrice = record.BuyPrice;
+        var buyPriceFactor = 1;
         var expectedReturns = record.ExpectedReturns * 3;
         var sellPrice = record.SellPrice * 3;
         var mcRecord = _.find(dataList.mc, {
@@ -166,6 +167,7 @@ function getDataYc(res) {
           meanValue = meanValue + 2;
           count++;
           buyPrice = buyPrice + mcRecord.BuyPrice * 2;
+          buyPriceFactor = buyPriceFactor + 2;
           expectedReturns = expectedReturns + mcRecord.ExpectedReturns * 2;
           sellPrice = sellPrice + mcRecord.SellPrice * 2;
         }
@@ -180,7 +182,8 @@ function getDataYc(res) {
               return ob;
             }
           });
-          buyPrice = buyPrice + ycRecord.BuyPrice;
+          buyPrice = buyPrice + ycRecord.BuyPrice * 3;
+          buyPriceFactor = buyPriceFactor + 3;
           expectedReturns = expectedReturns + ycRecord.ExpectedReturns;
           sellPrice = sellPrice + ycRecord.SellPrice;
           meanValue = meanValue + 1;
@@ -191,7 +194,7 @@ function getDataYc(res) {
         newRecord.Stock = record.Stock,
           newRecord.Sector = record.Sector,
           newRecord.Cap = record.Cap,
-          newRecord.BuyPrice = buyPrice/meanValue,
+          newRecord.BuyPrice = buyPrice/buyPriceFactor,
           newRecord.ExpectedReturns = expectedReturns/meanValue,
           newRecord.BuySell = record.BuySell,
           newRecord.SellPrice = sellPrice/meanValue,
@@ -214,6 +217,7 @@ function getDataYc(res) {
 
       if (record.Stock) {
         var buyPrice = record.BuyPrice * 2;
+        var buyPriceFactor = 2;
         var expectedReturns = record.ExpectedReturns * 2;
         var sellPrice = record.SellPrice * 2;
         var meanValue = 2;
@@ -229,7 +233,8 @@ function getDataYc(res) {
               return ob;
             }
           });
-          buyPrice = buyPrice + ycRecord.BuyPrice;
+          buyPrice = buyPrice + ycRecord.BuyPrice*3;
+          buyPriceFactor = buyPriceFactor + 3;
           expectedReturns = expectedReturns + ycRecord.ExpectedReturns;
           sellPrice = sellPrice + ycRecord.SellPrice;
           meanValue = meanValue + 1;
@@ -240,7 +245,7 @@ function getDataYc(res) {
         newRecord.Stock = record.Stock,
           newRecord.Sector = record.Sector,
           newRecord.Cap = record.Cap,
-          newRecord.BuyPrice = buyPrice/meanValue,
+          newRecord.BuyPrice = buyPrice/buyPriceFactor,
           newRecord.ExpectedReturns = expectedReturns/meanValue,
           newRecord.BuySell = record.BuySell,
           newRecord.SellPrice = sellPrice/meanValue,
