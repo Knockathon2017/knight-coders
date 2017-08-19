@@ -1,0 +1,12 @@
+version: "2"
+
+services:
+  stock-service:
+    build:
+      context: .
+    container_name: stock-service
+    ports:
+     - "8787:8787"
+    volumes:
+      - .:/app
+      - /app/node_modules

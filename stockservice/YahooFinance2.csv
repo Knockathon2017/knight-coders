@@ -1,0 +1,14 @@
+Stock,Sector,Cap,BuyPrice,ExpectedReturns,BuySell,SellPrice,TimeFrame,Company
+ULTRACEMCO,Infrastructure,Large,3912,13.64,Buy,4530,1,UltraTech Cement Ltd.
+Infosys,IT,Large,900,16.67,Buy,1080,1,Infosys Ltd.
+Bharti Airtel,Telecom,Large,415,3.71,Buy,431,1,Bharti Airtel Ltd.
+TECHM,IT,Large,425,15,Buy,500,1,Tech Mahindra Ltd.
+ONGC,Petroleum,Large,160,-1.91,Sell,157,1,Oil And Natural Gas Corporation Ltd.
+Maruti,Automobiles,Large,7555,4.61,Buy,7920,1,Maruti Suzuki India Ltd.
+FEDRALBNK,Banks,Large,275,11.29,Buy,310,1,Federal Bnk Ltd
+CIPLA,Pharma,Large,570,5.79,Buy,605,1,Cipla Ltd.
+Tata Steel,Infrastructure,Large,620,3.13,Buy,640,1,Tata Steel Ltd.
+GAIL,Petroleum,Large,372,2.87,Buy,383,1,GAIL (India) Ltd.
+AUROPHARMA,Pharma,Large,687,22.81,Sell,890,1,Aurobindo Pharma Ltd.
+KIRLOSBROS,Engineering,Large,251,16.33,Buy,300,1,Kirloskar Brothers Ltd.
+BANKBARODA,Banks,Large,148,26.73,Buy,202,1,Bank of Baroda

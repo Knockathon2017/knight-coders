@@ -1,0 +1,9 @@
+Stock,Sector,Cap,BuyPrice,ExpectedReturns,BuySell,SellPrice,TimeFrame,Company
+Infosys,IT,Large,900,16.67,Buy,1080,1,Infosys Ltd.
+Bharti Airtel,Telecom,Large,415,3.71,Buy,431,1,Bharti Airtel Ltd.
+Maruti,Automobiles,Large,7555,4.61,Buy,7920,1,Maruti Suzuki India Ltd.
+HDFC,Banks,Large,1725,4.17,Buy,1800,1,HDFC Bank Ltd.
+CIPLA,Pharma,Large,570,5.79,Buy,605,1,Cipla Ltd.
+Tata Steel,Infrastructure,Large,620,3.13,Buy,640,1,Tata Steel Ltd.
+GAIL,Petroleum,Large,372,2.87,Buy,383,1,GAIL (India) Ltd.
+LT,Infrastructure,Large,1125,0.88,Buy,1135,1,Larsen & Tourbo Ltd.

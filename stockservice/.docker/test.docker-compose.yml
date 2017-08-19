@@ -1,0 +1,10 @@
+version: "2"
+
+services:
+  stock-service:
+    build:
+      context: ../
+      dockerfile: .docker/test.dockerfile
+    container_name: stock-service
+    ports:
+      - "8787:8787"
