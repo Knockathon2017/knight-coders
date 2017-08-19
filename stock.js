@@ -1,17 +1,15 @@
 
  chrome.browserAction.onClicked.addListener(function(tab) {
-  //On Firefox document.body.textContent is probably more appropriate
-   chrome.tabs.executeScript(null, { file: "jquery-3.2.1.min.js" }, function() {
-    chrome.tabs.executeScript(tab.id,{
-        // code: 'document.getElementsByClassName("rowHovr ng-scope")[0].innerHTML;'
-        code: `$(".table-responsive.clear_lr:not('.ng-hide') .table .rowHovr")`
-        //If you had something somewhat more complex you can use an IIFE:
-        //code: '(function (){return document.body.innerText})();'
-        //If your code was complex, you should store it in a
-        // separate .js file, which you inject with the file: property.
-    },receiveText);
-  });
-    
+     chrome.tabs.executeScript({file: "content.js"});    
+});
+
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
+  if(message.tableRows) {      
+      receiveText(message.tableRows);
+  }
+  else {
+      alert("no data found");
+  }
 });
 
 function receiveText(resultsArray){
@@ -30,19 +28,21 @@ function receiveText(resultsArray){
         notionalGainLossPerc: 0
     }
 
-    alert(resultsArray[0]);
+    //alert(resultsArray[0]);
 
     // resultsArray.forEach(function(element, index) {
     //     var column = $(element).find('td');
     //     // stockList.push(column[0].innerText);
     //     stockList.push(column[0]);
     // });
-    alert('hiiiii');
+    alert(resultsArray.length);
     
     for (var row = 0; row < resultsArray.length; row++) {        
         var column = $(resultsArray[row]).find('td');
-        // alert(Object.keys(column));
-        alert(column[0].innerText);
+        alert(Object.keys($(resultsArray[row])) );
+        alert(Object.keys(column));
+        //alert(column[0].innerText);
+        alert(column);
         alert('hi');        
         //stockDetail.company = column[0].innerText;
         // stockDetail.ltp =parseFloat( column[1].innerText);
