@@ -1,7 +1,5 @@
 'use strict';
 let mongoose = require('mongoose');
-// const configModule = require('exframe-configuration');
-// // const logger = require('exframe-logger').create(process.env.LOGSENE_TOKEN || 'token');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -17,6 +15,9 @@ mongoose.connect('mongodb://localhost:27017/stockdb', (err) => {
     } else {
 
     }
+});
+mongoose.connection.collections['companyindustries'].drop(function (err) {
+    console.log('collection dropped');
 });
 mongoose.connection.collections['economictimes'].drop(function (err) {
     console.log('collection dropped');

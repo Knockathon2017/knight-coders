@@ -5,6 +5,10 @@ var fs = require('fs');
 var _ = require('lodash');
 
 
+var companyIndustryList = fs.readFileSync('D:\Companies.csv').toString().split('\n');
+companyIndustryList.shift(); // Shift the headings off the list of records.
+var companyIndustrySchemaKeyList = ['Company', 'Industry', 'Symbol'];
+
 var economicTimesList = fs.readFileSync('D:\EconomicTimes2.csv').toString().split('\n');
 economicTimesList.shift(); // Shift the headings off the list of records.
 
@@ -21,6 +25,13 @@ mongoose.Promise = require('bluebird');
 
 var Promise = require("bluebird");
 Promise.promisifyAll(require("mongoose"));
+
+var CompanyIndustry = new mongoose.Schema({
+  Company: String,
+  Industry: String,
+  Symbol: String
+});
+var CompanyIndustryDoc = mongoose.model('CompanyIndustry', CompanyIndustry);
 
 var EconomicTimes = new mongoose.Schema({
   Stock: String,
@@ -126,7 +137,22 @@ function createDocRecurse(lineList, schemaName) {
       return resolve(true);
     }
   })
+}
 
+function createCompanyListDocRecurse() {
+  return new Promise((resolve, reject) => {
+    if (companyIndustryList && companyIndustryList.length && companyIndustryList[companyIndustryList.length] !== "") {
+      var line = companyIndustryList.shift();
+      var doc = new CompanyIndustryDoc();
+      
+      line.split(',').forEach(function (entry, i) {
+        doc[companyIndustrySchemaKeyList[i]] = entry;
+      });
+      return resolve(doc.save(createCompanyListDocRecurse()));
+    } else {
+      return resolve(true);
+    }
+  });
 }
 
 function getDataEc() {
@@ -191,16 +217,16 @@ function getDataYc(res) {
         }
 
         var newRecord = new Object();
-        newRecord.Stock = record.Stock,
-          newRecord.Sector = record.Sector,
-          newRecord.Cap = record.Cap,
-          newRecord.BuyPrice = buyPrice/buyPriceFactor,
-          newRecord.ExpectedReturns = expectedReturns/meanValue,
-          newRecord.BuySell = record.BuySell,
-          newRecord.SellPrice = sellPrice/meanValue,
-          newRecord.TimeFrame = record.TimeFrame,
-          newRecord.Company = record.Company,
-          newRecord.count = count;
+        newRecord.Stock = record.Stock;
+        newRecord.Sector = record.Sector;
+        newRecord.Cap = record.Cap;
+        newRecord.BuyPrice = buyPrice/buyPriceFactor;
+        newRecord.ExpectedReturns = expectedReturns/meanValue;
+        newRecord.BuySell = record.BuySell;
+        newRecord.SellPrice = sellPrice/meanValue;
+        newRecord.TimeFrame = record.TimeFrame;
+        newRecord.Company = record.Company;
+        newRecord.count = count;
         newRecord.weightedAvg = meanValue;
         var stockc = new stockCountDoc(newRecord);
         stockc.save((err) => {
@@ -242,16 +268,16 @@ function getDataYc(res) {
         }
 
         var newRecord = new Object();
-        newRecord.Stock = record.Stock,
-          newRecord.Sector = record.Sector,
-          newRecord.Cap = record.Cap,
-          newRecord.BuyPrice = buyPrice/buyPriceFactor,
-          newRecord.ExpectedReturns = expectedReturns/meanValue,
-          newRecord.BuySell = record.BuySell,
-          newRecord.SellPrice = sellPrice/meanValue,
-          newRecord.TimeFrame = record.TimeFrame,
-          newRecord.Company = record.Company,
-          newRecord.count = count;
+        newRecord.Stock = record.Stock;
+        newRecord.Sector = record.Sector;
+        newRecord.Cap = record.Cap;
+        newRecord.BuyPrice = buyPrice/buyPriceFactor;
+        newRecord.ExpectedReturns = expectedReturns/meanValue;
+        newRecord.BuySell = record.BuySell;
+        newRecord.SellPrice = sellPrice/meanValue;
+        newRecord.TimeFrame = record.TimeFrame;
+        newRecord.Company = record.Company;
+        newRecord.count = count;
         newRecord.weightedAvg = meanValue;
         var stockc = new stockCountDoc(newRecord);
         stockc.save((err) => {
@@ -271,16 +297,16 @@ function getDataYc(res) {
         var count = 1;
 
         var newRecord = new Object();
-        newRecord.Stock = record.Stock,
-          newRecord.Sector = record.Sector,
-          newRecord.Cap = record.Cap,
-          newRecord.BuyPrice = record.BuyPrice,
-          newRecord.ExpectedReturns = record.ExpectedReturns,
-          newRecord.BuySell = record.BuySell,
-          newRecord.SellPrice = record.SellPrice,
-          newRecord.TimeFrame = record.TimeFrame,
-          newRecord.Company = record.Company,
-          newRecord.count = count;
+        newRecord.Stock = record.Stock;
+        newRecord.Sector = record.Sector;
+        newRecord.Cap = record.Cap;
+        newRecord.BuyPrice = record.BuyPrice;
+        newRecord.ExpectedReturns = record.ExpectedReturns;
+        newRecord.BuySell = record.BuySell;
+        newRecord.SellPrice = record.SellPrice;
+        newRecord.TimeFrame = record.TimeFrame;
+        newRecord.Company = record.Company;
+        newRecord.count = count;
         newRecord.weightedAvg = meanValue;
         var stockc = new stockCountDoc(newRecord);
         stockc.save((err) => {
@@ -300,17 +326,27 @@ function getDataYc(res) {
 
 function getStockCount(res) {
   return stockCountDoc.find({}, (err, doc) => {
-    //console.log(doc)
     res.send(doc);
   });
 }
+
+function getCompanyIndustry(res) {
+  return CompanyIndustryDoc.find({}, (err, doc) => {
+    res.send(doc);
+  });
+}
+
 module.exports.stock = (req, res) => {
-  createDocRecurse(economicTimesList, 'EconomicTimes').then(() => {
-    getDataEc().then(() => {
-      createDocRecurse(moneyControlList, 'MoneyControl').then(() => {
-        getDataMc().then(() => {
-          createDocRecurse(yahooFinanceList, 'YahooFinance').then(() => {
-            getDataYc(res);
+  createCompanyListDocRecurse().then(() => {
+    createDocRecurse(economicTimesList, 'EconomicTimes').then(() => {
+      getDataEc().then(() => {
+        createDocRecurse(moneyControlList, 'MoneyControl').then(() => {
+          getDataMc().then(() => {
+            createDocRecurse(yahooFinanceList, 'YahooFinance').then(() => {
+              getDataYc(res);
+            }).catch((err) => {
+              console.log(err)
+            });
           }).catch((err) => {
             console.log(err)
           });
@@ -324,10 +360,14 @@ module.exports.stock = (req, res) => {
       console.log(err)
     });
   }).catch((err) => {
-    console.log(err)
+    console.log(err);
   });
-
 };
+
 module.exports.stockCount = (req, res) => {
   getStockCount(res);
+}
+
+module.exports.stockIndustry = (req, res) => {
+  getCompanyIndustry(res);
 }

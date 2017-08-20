@@ -7,5 +7,6 @@ router.get('/stocks', routeLogic.stock);
 
 router.get('/stockCount', routeLogic.stockCount);
 
+router.get('/stockIndustry', routeLogic.stockIndustry);
 
 module.exports = router;
