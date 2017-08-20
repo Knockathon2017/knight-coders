@@ -20,8 +20,30 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
                 success: function(data) {
                     var userStocks = message.stockList;
                     var stocksToBuy = [];
+                    var userCompanyStocksPref = [];
 
                     $.each(userStocks, function(i, d){
+                        // var stockIndustryData = _.find(stocksIndustry, function(record) {
+                        //     return record.Company.toLowerCase().trim().includes(d.company.toLowerCase().trim());
+                        // });
+                        // if(stockIndustryData) {                        
+                        //     var stockIndustryInList = _.first(userCompanyStocksPref, function(record) {
+                        //         return record.Industry.trim() === stockIndustryData.Industry;
+                        //     });
+
+                        //     if(!stockIndustryInList) {
+                        //         var filteredStockIndustry = _.filter(data, function(record) {
+                        //             return (record.Sector.toLowerCase().trim().includes(stockIndustryData.Industry.toLowerCase().trim()) && !record.Company.toLowerCase().trim().includes(d.company.toLowerCase().trim()));
+                        //         });
+                        //         userCompanyStocksPref.push(filteredStockIndustry);
+                        //         alert(filteredStockIndustry[0]);
+                        //     }                            
+                        // }
+                        
+
+
+
+
                         var filteredStock = _.filter(data, function(record) {
                             return record.Company.toLowerCase().trim().includes(d.company.toLowerCase().trim());
                         });                
