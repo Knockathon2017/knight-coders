@@ -23,26 +23,21 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
                     var userCompanyStocksPref = [];
 
                     $.each(userStocks, function(i, d){
-                        // var stockIndustryData = _.find(stocksIndustry, function(record) {
-                        //     return record.Company.toLowerCase().trim().includes(d.company.toLowerCase().trim());
-                        // });
-                        // if(stockIndustryData) {                        
-                        //     var stockIndustryInList = _.first(userCompanyStocksPref, function(record) {
-                        //         return record.Industry.trim() === stockIndustryData.Industry;
-                        //     });
+                        var stockIndustryData = _.find(stocksIndustry, function(record) {
+                            return record.Company.toLowerCase().trim().includes(d.company.toLowerCase().trim());
+                        });
+                        if(stockIndustryData) {                    
+                            var stockIndustryInList = _.find(userCompanyStocksPref, function(record) {                                
+                                return record.Sector.toLowerCase().trim().includes(stockIndustryData.Industry.toLowerCase().trim());
+                            });
 
-                        //     if(!stockIndustryInList) {
-                        //         var filteredStockIndustry = _.filter(data, function(record) {
-                        //             return (record.Sector.toLowerCase().trim().includes(stockIndustryData.Industry.toLowerCase().trim()) && !record.Company.toLowerCase().trim().includes(d.company.toLowerCase().trim()));
-                        //         });
-                        //         userCompanyStocksPref.push(filteredStockIndustry);
-                        //         alert(filteredStockIndustry[0]);
-                        //     }                            
-                        // }
-                        
-
-
-
+                            if(!stockIndustryInList) {
+                                var filteredStockIndustry = _.filter(data, function(record) {
+                                    return (record.Sector.toLowerCase().trim().includes(stockIndustryData.Industry.toLowerCase().trim()) && !record.Company.toLowerCase().trim().includes(d.company.toLowerCase().trim()));
+                                });
+                                userCompanyStocksPref = userCompanyStocksPref.concat(filteredStockIndustry);
+                            }                            
+                        }
 
                         var filteredStock = _.filter(data, function(record) {
                             return record.Company.toLowerCase().trim().includes(d.company.toLowerCase().trim());
@@ -66,6 +61,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
                             }                            
                         }
                     });
+
+                    var sortedStocksForIndustry = _.orderBy(userCompanyStocksPref, ['weightedAvg'], ['desc']);            
+                    var industryBasedTopFiveStocks = sortedStocksForIndustry.slice(0, 5);
                 
                     var sortedStocks = _.orderBy(data, ['weightedAvg'], ['desc']);            
                     var genericTopFiveStocks = sortedStocks.slice(0, 5);
@@ -75,11 +73,16 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
                         outputUserPreference = outputUserPreference + (i+1) + '. Company: ' + da.Company + ' | Buy Price: ' + da.BuyPrice.toFixed(2) + ' | Target Price: ' + da.SellPrice.toFixed(2) + ' | Expected Returns: ' + da.ExpectedReturns.toFixed(2) + '\n';
                     });
 
+                    var outputindustryBasedPreference = 'User industry based prediction: \n';
+                    $.each(industryBasedTopFiveStocks, function(i, da) {
+                        outputindustryBasedPreference = outputindustryBasedPreference + (i+1) + '. Company: ' + da.Company + ' | Buy Price: ' + da.BuyPrice.toFixed(2) + ' | Target Price: ' + da.SellPrice.toFixed(2) + ' | Expected Returns: ' + da.ExpectedReturns.toFixed(2) + '\n';
+                    });
+
                     var outputgenericPreference = 'General prediction: \n';
                     $.each(genericTopFiveStocks, function(i, da) {
                         outputgenericPreference = outputgenericPreference + (i+1) + '. Company: ' + da.Company + ' | Buy Price: ' + da.BuyPrice.toFixed(2) + ' | Target Price: ' + da.SellPrice.toFixed(2) + ' | Expected Returns: ' + da.ExpectedReturns.toFixed(2) + '\n';
                     });
-                    var finalOutput = outputUserPreference + '\n\n' + outputgenericPreference;
+                    var finalOutput = outputUserPreference+ '\n\n' + outputindustryBasedPreference + '\n\n' + outputgenericPreference;
                     alert(finalOutput);
                 }
             });
